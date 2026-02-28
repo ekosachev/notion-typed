@@ -5,6 +5,7 @@ import httpx
 
 from notion_typed.enums import NotionVersion
 from notion_typed.exceptions import APIError, AuthenticationError, PermissionError, RateLimitError
+from notion_typed.models.page import Page
 
 DEFAULT_VERSION = NotionVersion.V2025_09_03
 DEFAULT_BASE_URL = "https://api.notion.com"
@@ -77,3 +78,9 @@ class Client:
             raise exc
 
         return data
+
+    def get_page(self, id: str) -> Page:
+        base_url = "/v1/pages/"
+
+        response = self._request("GET", base_url + id)
+        return Page.from_api(response)
